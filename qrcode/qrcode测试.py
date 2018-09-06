@@ -11,14 +11,14 @@ import webbrowser as web # 调用浏览器
 def browser(url):  
     web.open_new_tab(url)  
 
-def test_url_qrcode():
+def test_url_qrcode(url, qrcodename, logo, boxsize=8):
     # 生成url qrcode测试
     
-    text = 'https://github.com/xboye/pythonCase'
-    logo = 'github_logo.jpg'
-    qrcodename = 'githubqrcode.png'
+    #text = 'https://github.com/xBoye/pythonCase'
+    #logo = 'github_logo.jpg'
+    #qrcodename = 'githubqrcode.png'
     qc = QrCode()
-    qc.createqrcode(text, qrcodename, logo, boxsize=8)
+    qc.createqrcode(url, qrcodename, logo, boxsize=boxsize)
     showimage(qrcodename)
 
     # 读qrcode
@@ -58,9 +58,12 @@ if __name__ == '__main__':
     test_read_qrcode(qrcodename, isbase64=True)
     
     # 测试生成中文二维码
-    print('\n> 测试生成中文二维码')
-    test_han_qrcode()
+    #print('\n> 测试生成中文二维码')
+    #test_han_qrcode()
     
     # 测试url二维码
+    url ='http://gupuyuan2015.blog.163.com/blog/static/2467651072008626840486/'
+    logo = '缘logo.png'
+    qrcodename = '博文1qrcode.png'
     print('\n> 测试url二维码')
-    test_url_qrcode()
+    test_url_qrcode(url, qrcodename, logo)
