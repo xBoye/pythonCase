@@ -63,7 +63,7 @@ def gen_yao(Yong_shu):
 def gen_gua(Yong_shu):
     #十八变成卦，每卦6爻
     yaos = []
-    logging('> 机器卜筮助理 %s' % now().rjust(28))   #三变成爻，十八变成卦
+    logging('> 机器卜筮     %s' % now().rjust(28))   #三变成爻，十八变成卦
     for y in range(1,6+1):
         yao_shu = gen_yao(Yong_shu)
         yaos.append(yao_shu)
