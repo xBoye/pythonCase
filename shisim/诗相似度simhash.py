@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Sep  7 21:46:19 2018
-@title：查找两首最相似的诗-使用simhash
+@title：simhash计算诗相似度
 @author: ff7f
 """
 """
@@ -9,9 +9,8 @@ Created on Fri Sep  7 21:46:19 2018
 处理流程：
 1.读入文本，生成诗列表；
 2.分词，基于七律诗特点，按12,34,56,67格式进行分词；
-3.文档向量化，使用tfidf向量方法；
-4.计算simhash，两两计算hamming距离，生成相似字典；
-5.相似字典数据按相似度逆序排列，找出最相似的两首诗。
+3.计算simhash，两两计算hamming距离，生成相似字典；
+4.根据相似字典数据找出最相似TOPn首诗。
 """
 import re
 import numpy as np
