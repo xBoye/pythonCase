@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Sep 11 21:20:08 2018
-@title：求可达性矩阵及求强分图
+@title：求可达性矩阵及强分图
 @author: ff7f
 """
 from 矩阵类 import *
