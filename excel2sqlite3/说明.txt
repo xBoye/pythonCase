@@ -1,0 +1,71 @@
+解析Excel电子表格数据导入sqlite3数据库
+说明：
+根据教学记录表的数据结构，用sqlite3创建student.db数据库，并设计了6个基本表：教师表t, 学生表s, 课程表c, 授课表sh, 选课表sc, 教学记录表rec。
+生成表结构sql语句：
+    # 创建教师表t
+    create_table_teacher = """
+        create table if not exists t(     
+            tno     char(10) primary key,
+            tname   char(10),
+            title   char(10))"""
+         
+    # 创建学生表s
+    create_table_student = """
+        create table if not exists s(
+            sno     char(10) primary key,
+            sname   char(10),
+            age     smallint,
+            sex     char(2),
+            sclass  char(10))"""
+        
+    # 创建课程表c
+    create_table_course = """
+        create table if not exists c(
+            cno        char(10) primary key,
+            cname      char(20),
+            class_hour smallint
+            )"""
+    
+    # 创建授课表sh(schedules)
+    create_table_schedules = """
+        create table if not exists sh(
+            tno        char(10),
+            tname      char(10),
+            cno        char(10),
+            cnum       char(5),
+            classtime  text,
+            classplace text,
+            sclass     char(10)
+            )"""
+
+    # 创建选课表sc
+    create_table_sc = """
+        create table if not exists sc(
+            sno   char(10),
+            cno   char(10),
+            score smallint)"""
+    
+    # 创建记录表rec(records)
+    create_table_records = """
+        create table if not exists rec(
+            sno    char(10) primary key,
+            cno    char(10),
+            cnum   char(5),
+            cdate  date,
+            state  char(1)
+            )"""
+    
+    # 查询创建的表
+    select_tables = """select name from sqlite_master where type='table'"""
+    
+    # 插入数据
+    insert_student = """insert into s(sno,sname,sclass) values(?,?,?)"""
+    insert_schedules = """insert into sh(tname,cno,cnum,classtime,classplace,sclass) values(?,?,?,?,?,?)"""
+    insert_teacher = """insert into t(tno,tname) values(?,?)"""
+    insert_course = """insert into c(cno,cname) values(?,?)"""
+    
+    # 查询插入的数据
+    select_course = """select * from c"""   # 查询课程
+    select_teacher = """select * from t"""  # 查询教师
+    select_student = """select * from s"""  # 查询学生
+
