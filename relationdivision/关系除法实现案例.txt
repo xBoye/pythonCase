@@ -1,0 +1,88 @@
+关系除法R÷C实现详解
+在关系模型的数据操作实现中，关系的除法运算是比较抽象的运算。除法是个组合运算，可以分步骤实现，而从语义上理解关系除法意义还是比较明确的。
+以下用案例说明具体实现。
+设R与C是两个关系，R÷C结果求解可以分成2个方面：
+1)结果集的属性：结果集也是一个关系，根据除法概念，R÷C的属性集为关系R的属性集去掉关系C的属性集剩下的属性集。
+如R(sno, sname, cno, cname), C(cno, cname)，则R÷C的属性为(sno, sname)。
+这是第一步，求出结果集属性。
+2)结果集有哪些元组。结果集元组直接求比较啰嗦，可以反向来理解。假设结果集元组已经求出来了，为t,那么要求t与关系C的所有元组做笛卡尔积拼成的元组，都包含在R里。
+从语义上来说R÷C有明确的含义：如果R是学生选课元组，C是课程的元组，那么R÷C就是选了C中所有课的学生(学号sno、姓名sname)。
+关于除法，书中P48例2.5是求解例子，例2.6(7)(8)写代数表达式例子，课后习题2.17(7)(8)也有两个差不多的练习。
+例2.6 设教学数据库中有四个关系：
+      教师关系  T(Tno，TNAME，TITLE)
+      课程关系	C（Cno，CNAME，Tno)
+      学生关系	S（Sno，SNAME，AGE，SEX）
+      选课关系	SC（Sno，Cno，SCORE）
+7)检索学习全部课程的学生姓名。
+[解]
+i)从关系C投影所有课，用cno表示：πcno(C)
+ii)所有学生选课的情况在SC关系中，不要score属性：πsno,cno(SC)。
+iii)用ii)的结果除以i)的结果：πsno,cno(SC)÷πcno(C)，得到选了所有课的学生学号。
+iv)把iii)的结果与关系S做自然连接然后投影sname，得到选课的学生姓名，即：
+πsname(S∞(πsno,cno(SC)÷πcno(C)))
+
+8)检索所学课程包含学生S3所学课程学生学号。
+同理求解：
+i)求出S3学生所学的所有课的课程号：πcno(σsno='S3'(SC))；
+ii)所有学生选课情况：πsno,cno(SC)。
+iii)选了S3所学课的学生学号：πsno,cno(SC)÷πcno(σsno='S3'(SC))
+
+习题2.17(所用数据库表和例题一样，自己练习)
+7)检索全部学生都选修的课程的课程号和课程名。
+8)检索选修课程包含liu老师所授课全部课程的学生学号。
+
+下面说明下P48例2.5关系R÷C案例。
+[例]已知关系R、C(分为C1,C2,C3三种情况)如下，求R÷C。
+关系R
+sno,sname,cno,cname
+s1,bao,c1,DB
+s1,bao,c2,OS
+s1,bao,c3,DS
+s1,bao,c4,MIS
+s2,gu,c1,DB
+s2,gu,c2,OS
+s3,an,c2,OS
+s4,li,c2,OS
+s4,li,c4,MIS
+
+关系C1
+cno, cname
+c2,  OS
+
+关系R÷C1
+sno  sname
+s1   bao
+s2   gu
+s3   an
+s4   li
+
+关系C2
+cno, cname
+c2,  OS
+c4,  MIS
+
+关系R÷C2
+sno,sname
+s1,bao
+s4,li
+
+
+关系C3
+cno, cname
+C1,  DB
+c2,  OS
+c4,  MIS
+
+关系R÷C3
+sno  sname
+s1   bao
+
+最后用代码验证选修C中所有课的学生学号与姓名。
+SQL语句：
+select distinct sno,sname 
+from R as X
+where not exists (
+    select * from C2 as C 
+	where not exists(
+	    select * from R as Y
+		where Y.sno=X.sno and Y.cno=C.cno));
